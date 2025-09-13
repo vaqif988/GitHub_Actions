@@ -6,7 +6,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Use Custom Action
-        uses: ./.github/actions/cache-node-modules
+
+      - name: Cache Node Modules
+        uses: actions/cache@v4
         with:
-          caching: 'false'
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install Dependencies
+        run: npm install
